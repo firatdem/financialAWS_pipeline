@@ -1,0 +1,13 @@
+{
+  "order_id": "12345",
+  "customer_id": "SAVEA",
+  "order_date": "2018-05-01",
+  "contact_name": "Jose Pavarotti",
+  "address": "187 Suffolk Ln.",
+  "city": "Boise",
+  "postal_code": "83720",
+  "country": "USA",
+  "phone": "(208) 555-8097",
+  "fax": "None",
+  "total_price": "4722.3"
+}
