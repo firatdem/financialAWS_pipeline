@@ -43,7 +43,7 @@ A modular, cloud-ready pipeline designed to ingest, process, and extract structu
   
 ---
 
-## 🛠️ How to Run (Each process is modular, by design can be run comepletely independent of one another, still need to create universal main to call all at once.)
+## 🛠️ How to Run (Each process is modular, by design can be run completely independent of one another, still need to create universal main to call all at once.)
 
 ### ▶️ Step 1: Run Ingestion Service
 
