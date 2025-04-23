@@ -23,9 +23,27 @@ A modular, cloud-ready pipeline designed to ingest, process, and extract structu
 - Implements **automated cleanup** of the `processed_images/` folder before each run.
 - Saves each page as a separate `.png` image for downstream processing.
 
+### 🔹 Step 3: Parsing Layer (Complete)
+
+- **Exposes `/run-parser/` API** to run OCR and extract structured data from images.
+- Uses Tesseract OCR to convert .png files to raw text.
+- Applies regex-based field extraction (e.g. invoice number, date, price, etc.).
+- Outputs parsed results as .json files in the parsed_results/ folder.
+
+### 🔹 Step 4: Data Storage Layer (Complete
+- **Exposes `/init-db/` and `/test-insert` APIs** fpr DB scehma setup and insertion testing.
+- Uses **PostgreSQL** running inside a **Docker container**
+- Extracted fields from Step 3 are saved into a structured `invoices` table
+- Credentials managed via `.env` file in project root
+   
+### 🔹 Step 5: Export Layer (Complete)
+- **Exposes `/export/csv` endpoint** for downloading all stored invoices.
+- Pulls all data from PostgreSQL and converts it into a **downloadable CSV file.**
+- Supports future expansion for Excel/JSON export and filter-based querying.
+  
 ---
 
-## 🛠️ How to Run
+## 🛠️ How to Run (Each process is modular, by design can be run comepletely independent of one another, still need to create universal main to call all at once.)
 
 ### ▶️ Step 1: Run Ingestion Service
 
@@ -34,7 +52,7 @@ pip install -r requirements.txt
 cd ingestion_service
 python main.py
 ```
-#### Visit the interactive docs: http://127.0.0.1:8001/docs
+#### Visit the interactive docs: http://127.0.0.1:8000/docs
 
 ### ▶️ Step 2: Run Preprocessing Service
 
@@ -42,7 +60,32 @@ python main.py
 cd preprocessing_service
 python main.py
 ```
-#### Visit the interactive docs: http://127.0.0.1:8000/docs
+#### Visit the interactive docs: http://127.0.0.1:8001/docs
+
+### ▶️ Step 3: Run Parsing Service
+
+```bash
+cd parsing_services
+python main.py
+```
+#### Visit the interactive docs: http://127.0.0.1:8002/docs
+
+### ▶️ Step 4: Run Storage Service (PostgreSQL required)
+
+```bash
+docker-compose up -d  # Starts the Postgres container
+cd storage_service
+python main.py
+```
+#### Visit the interactive docs: http://127.0.0.1:8003/docs
+
+### ▶️ Step 5: Run Export Service
+
+```bash
+cd export_service
+python main.py
+```
+#### Visit the interactive docs: http://127.0.0.1:8004/docs
 
 ---
 
@@ -71,59 +114,34 @@ python main.py
 
 ---
 
-## 🧰 Tech Stack
-
-- Python 3.x  
-- FastAPI  
-- Uvicorn  
-- Pillow  
-- pdf2image  
-- OpenCV *(optional)*  
-- Modular structure *(future Docker + AWS ready)*
+🧰 Tech Stack
+- Python 3.x
+- FastAPI (REST Framework)
+- PostgreSQL (via Docker)
+- Tesseract OCR
+- Pandas (for CSV export)
+- Pillow / pdf2image (for image conversion)
+- dotenv + Uvicorn + psycopg2
+- Modular folder structure (AWS-ready, EC2 compatible)
 
 ---
 
 ## 🛤️ Roadmap
 
-### ✅ Step 1: Ingestion Layer (Complete)
-- Build `/upload/` REST endpoint with FastAPI  
-- Support batch uploads of PDF files  
-- Validate file extensions (only `.pdf`)  
-- Sanitize filenames and remove unsafe characters  
-- Add timestamps to filenames to prevent collisions  
-- Store files to a configurable local `uploads/` directory  
-
-### ✅ Step 2: Preprocessing Layer (Complete)
-- Convert PDFs to images using `pdf2image`  
-- Apply grayscale + contrast enhancement  
-- Binarize images for OCR-readiness  
-- Expose `/preprocess/` route for file-based image generation  
-- Clean `processed_images/` before each run  
-
-### 🔜 Step 3: Parsing Layer
-- Use regex and/or spaCy to extract structured fields (invoice #, date, amount, etc.)  
-- Design parser classes per document type (invoices, loan forms, etc.)  
-- Build a fallback parser for unknown layouts  
-
-### 🔜 Step 4: Data Storage Layer
-- Store structured data in DynamoDB or PostgreSQL  
-- Link stored data to original document  
-- *(Optional)* Add metadata like upload time, user, processing status  
-
-### 🔜 Step 5: Analytics & Reporting *(Optional)*
-- Create a dashboard with Dash, Streamlit, or Superset  
-- Add filters, document search, and summary metrics  
-- Export parsed data to Excel/CSV  
+### ✅ Step 1: Ingestion Layer
+### ✅ Step 2: Preprocessing Layer
+### ✅ Step 3: Parsing Layer
+### ✅ Step 4: Data Storage Layer
+### ✅ Step 5: Export Layer (Add filters to exports!!!)
 
 ---
 
 ## 🚀 Deployment & DevOps
 
-- Dockerize all services  
-- Add `.env` config support and use environment variables  
-- Implement S3 storage for cloud deployments  
-- Deploy to AWS (ECS, Lambda, or EC2)  
-
+- Docker Compose support for PostgreSQL
+- .env used for managing credentials
+- Future AWS-ready: S3 for file storage, EC2 for app hosting, RDS for managed DB
+ 
 ---
 
 ## 🔐 Security & Enhancements
@@ -137,7 +155,7 @@ python main.py
 
 ## 📌 Project Status
 
-✅ **In Progress** – Step 1 & Step 2 complete. Pipeline is modular and future-ready.
+✅ **In Progress** – Full ingestion-to-storage pipeline is implemented and testable. Dashboard and cloud deployment are next.
 
 ---
 
