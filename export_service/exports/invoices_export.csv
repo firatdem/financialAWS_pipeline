@@ -1,0 +1,2 @@
+id,source_file,order_id,customer_id,order_date,contact_name,address,city,postal_code,country,phone,fax,total_price,created_at
+1,invoice_sample_page_1.png,INV-1001,CRED123,2025-04-15,Jane Doe,123 Main St,New York,10001,USA,(212) 555-1234,212-555-5678,1249.99,2025-04-23 16:08:59.910402
