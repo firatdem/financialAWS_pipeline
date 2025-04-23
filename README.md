@@ -45,6 +45,14 @@ A modular, cloud-ready pipeline designed to ingest, process, and extract structu
 
 ## 🛠️ How to Run (Each process is modular, by design can be run completely independent of one another, still need to create universal main to call all at once.)
 
+Prelim steps:
+
+git clone https://github.com/firatdem/financialAWS_pipeline.git
+
+THEN,
+
+Create env to match the docker-compose.yml. Did not include .env (although not really secret...) for keeping good practice reasons.
+
 ### ▶️ Step 1: Run Ingestion Service
 
 ```bash
